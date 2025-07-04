@@ -19,13 +19,17 @@
             <div id="calculator-container">
                 <h2>💰 Calculator</h2>
 
-                <form id="calculator-form">
+                <form class="calculator-form" id="investment-form">
                     <label for="investment">Investment Amount</label>
                     <input type="number" id="investment" required min="0">
+                </form>
 
+                <form class="calculator-form" id="start-date-form">
                     <label for="start-date">Start Date of Investment</label>
                     <input type="date" id="start-date" required>
+                </form>
 
+                <form class="calculator-form" id="years-form">
                     <label for="years">Investment Duration (in years)</label>
                     <input type="number" id="years" required min="1">
                 </form>
