@@ -1,0 +1,103 @@
+:root {
+    --purple: #4d6bdd;
+    --font-color: #15284b;
+    --bg-color: #f9f9fa;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif; /* Install font if you want to use it */
+    color: var(--font-color);
+}
+
+#header h1 {
+    background-color: var(--purple);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#root {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+}
+
+#calculator {
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+}
+
+#calculator-container {
+    width: 100%;
+    max-width: 600px;
+    background-color: var(--bg-color);
+    margin: 50px;
+    padding: 20px 50px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.38); 
+    box-shadow: 0px 3px 8px 0px rgba(0,0,0,0.38);
+}
+
+#calculator-container h2 {
+    font-size: 22pt;
+    margin: 20px 0;
+}
+
+#calculator-form {
+    display: flex;
+    flex-direction: column;
+}
+
+#calculator-form input {
+    margin: 10px 0;
+    padding: 10px 20px;
+    border: 2px solid var(--purple);
+    border-radius: 10px;
+    font-size: 13pt;
+}
+
+#calculator-form input:focus {
+    outline: none;
+    border: 2px solid var(--font-color);
+}
+
+#calculate {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}
+
+#calculate-btn {
+    padding: 10px 40px;
+    font-size: 12pt;
+    background-color: var(--purple);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+#calculate-btn:hover {
+    opacity: 0.8;
+}
+
+
+/* Removes the spinner buttons for the number inputs */
+input[type-number]::-webkit-inner-spin-button,
+input[type-number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
