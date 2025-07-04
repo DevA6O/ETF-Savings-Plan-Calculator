@@ -19,6 +19,10 @@
     border-radius: 10px;
 }
 
+#header p {
+    margin: 10px 0 0 10px;
+}
+
 #root {
     display: flex;
     justify-content: center;
@@ -50,12 +54,12 @@
     margin: 20px 0;
 }
 
-#calculator-form {
+.calculator-form {
     display: flex;
     flex-direction: column;
 }
 
-#calculator-form input {
+.calculator-form input {
     margin: 10px 0;
     padding: 10px 20px;
     border: 2px solid var(--purple);
@@ -63,7 +67,7 @@
     font-size: 13pt;
 }
 
-#calculator-form input:focus {
+.calculator-form input:focus {
     outline: none;
     border: 2px solid var(--font-color);
 }
@@ -90,6 +94,29 @@
     opacity: 0.8;
 }
 
+#result {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    background-color: rgb(114, 228, 114);
+    padding: 10px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.wrong-inpt {
+    border-color: red !important;
+}
+
+.wrong-label {
+    color: red;
+    margin: 0px 0 15px 0;    
+}
+
+.highlight_result {
+    font-weight: bold;
+}
 
 /* Removes the spinner buttons for the number inputs */
 input[type-number]::-webkit-inner-spin-button,
