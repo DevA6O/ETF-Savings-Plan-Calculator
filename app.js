@@ -10,6 +10,7 @@ function validateUserInput(investmentAmountElement, periodElement, yearsElement)
 
     let isInptValid = true;
 
+    // Validate the user inputs 
     if (!investmentAmountElement.checkValidity()) {
         const investmentForm = document.getElementById("investment-form");
         const error_label = document.createElement("label");
@@ -66,7 +67,7 @@ function calculateFutureValue(investmentAmountElement, periodElement, yearsEleme
     // Calculate future value
     let futureValue = 0
 
-    if (periodsPerYear != null && totalPayments !== 1) {
+    if (periodsPerYear != null && totalPayments > 1) {
         futureValue = investmentAmount * (Math.pow(1 + annualRate / periodsPerYear, periodsPerYear * years) - 1) / (annualRate / periodsPerYear);
     } else {
         futureValue = investmentAmount * Math.pow(1 + annualRate, years);
@@ -75,6 +76,20 @@ function calculateFutureValue(investmentAmountElement, periodElement, yearsEleme
     // Round the future value and convert it to US spelling
     const rounded = Math.round(futureValue * 100) / 100
     return rounded.toLocaleString("en-US");
+}
+
+function calculateTotalInvestment(investmentAmount, period, years) {
+    // Calculate the total investment 
+    let totalInvestment = 0; 
+
+    if (period) {
+        totalInvestment = (investmentAmount * period) * years
+    } else {
+        totalInvestment = investmentAmount * years
+    }
+
+    const roundTotalInvestment = Math.round(totalInvestment * 100) / 100
+    return roundTotalInvestment.toLocaleString("en-US");
 }
 
 
@@ -122,6 +137,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
             pTag = document.createElement("p");
             pTag.innerHTML = text;
             
+            // Calculate total investment and add it to the result container
+            const totalInvestment = calculateTotalInvestment(investmentAmountElement.value, periodElement.value, years.value)
+
+            h2Tag = document.createElement("h4");
+            h2Tag.innerHTML = `Your total investment is: $${totalInvestment}.`
+            
+            resultContainer.appendChild(h2Tag)
             resultContainer.appendChild(pTag);
         }
     })
