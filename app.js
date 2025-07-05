@@ -85,7 +85,7 @@ function calculateTotalInvestment(investmentAmount, period, years) {
     if (period) {
         totalInvestment = (investmentAmount * period) * years
     } else {
-        totalInvestment = investmentAmount * years
+        totalInvestment = investmentAmount
     }
 
     const roundTotalInvestment = Math.round(totalInvestment * 100) / 100
