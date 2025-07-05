@@ -1,107 +1,72 @@
 // Average return on investment per year
 const annualRate = 0.07;
 
-function validateUserInpts(investmentAmountElement, periodElement, yearsElement) {
+function validateUserInput(investmentAmountElement, periodElement, yearsElement) {
     // Reset errors
     document.querySelectorAll(".wrong-label").forEach(label => label.remove());
     investmentAmountElement.classList.remove("wrong-inpt");
     periodElement.classList.remove("wrong-inpt");
     yearsElement.classList.remove("wrong-inpt");
 
-    // Define the values
-    const investmentAmount = investmentAmountElement.value;
-    const period = periodElement.value;
-    const years = yearsElement.value;
-    console.log(period)
-    // Define a variable for checking if the user has entered valid informations
-    let isValid = true;
+    let isInptValid = true;
 
-    // Validates the user inputs
-    if (investmentAmount) {
-        let investmentAmountValid = false;
+    if (!investmentAmountElement.checkValidity()) {
+        const investmentForm = document.getElementById("investment-form");
+        const error_label = document.createElement("label");
 
-        if (investmentAmount <= 0) {
-            error_msg = "The investment amount must be greater than 0.";
-        } else if (investmentAmount >= 999_999_000) {
-            error_msg = "The investment amount must be smaller than $999,999,000";
-        } else {
-            investmentAmountValid = true;
-        }
+        investmentAmountElement.classList.add("wrong-inpt");
 
-        if (!investmentAmountValid) {
-            const investmentForm = document.getElementById("investment-form");
-            const error_label = document.createElement("label");
-
-            investmentAmountElement.classList.add("wrong-inpt");
-            error_label.textContent = error_msg;
-            error_label.classList.add("wrong-label");
+        error_label.textContent = investmentAmountElement.validationMessage;
+        error_label.classList.add("wrong-label");
             
-            investmentForm.appendChild(error_label);
-            isValid = false;
-        }
-    }
-
-    if (period !== "" && !Number.isNaN(period)) {
-        let periodValid = false;
-
-        if (period <= 0) {
-            error_msg = "The number of this field must be higher than 0.";
-        } else if (period > 12) {
-            error_msg = "The number of this field must be smaller than 12.";
-        } else {
-            periodValid = true;
-        }
-
-        if (!periodValid) {
-            const periodForm = document.getElementById("period-form");
-            const error_label = document.createElement("label");
-
-            periodElement.classList.add("wrong-inpt");
-            error_label.textContent = error_msg;
-            error_label.classList.add("wrong-label");
-
-            periodForm.appendChild(error_label);
-            isValid = false;
-        }
-    }
-
-    if (years) {
-        let yearsValid = false;
-
-        if (years <= 0) {
-            error_msg = "The investment duration must be greater than 0 years.";
-        } else if (years > 100) {
-            error_msg = "The investment duration must be smaller than 100 years.";
-        } else {
-            yearsValid = true;
+        if (investmentAmountElement.validity.rangeOverflow) {
+            const formattedMax = Number(investmentAmountElement.max).toLocaleString("en-US");
+            const defaultMessage = investmentAmountElement.validationMessage;
+            error_label.textContent = defaultMessage.replace(investmentAmountElement.max, formattedMax);
         }
         
-        if (!yearsValid) {
-            const yearsForm = document.getElementById("years-form");
-            const error_label = document.createElement("label");
+        investmentForm.appendChild(error_label);
+        isInptValid = false;
+    } 
+    if (!periodElement.checkValidity()) {
+        const periodForm = document.getElementById("period-form");
+        const error_label = document.createElement("label");
 
-            yearsElement.classList.add("wrong-inpt");
-            error_label.textContent = error_msg;
-            error_label.classList.add("wrong-label");
+        periodElement.classList.add("wrong-inpt");
+        error_label.textContent = periodElement.validationMessage;
+        error_label.classList.add("wrong-label");
 
-            yearsForm.appendChild(error_label);
-            isValid = false;
-        }
+        periodForm.appendChild(error_label);
+        isInptValid = false;
+    } 
+    if (!yearsElement.checkValidity()) {
+        const yearsForm = document.getElementById("years-form");
+        const error_label = document.createElement("label");
+
+        yearsElement.classList.add("wrong-inpt");
+        error_label.textContent = yearsElement.validationMessage;
+        error_label.classList.add("wrong-label");
+
+        yearsForm.appendChild(error_label);
+        isInptValid = false;
     }
 
-    return isValid;
+    return isInptValid;
 }
 
 function calculateFutureValue(investmentAmountElement, periodElement, yearsElement) {
     // Define the values
-    const investmentAmount = investmentAmountElement.value;
-    const periodsPerYear = periodElement.value;
-    const years = yearsElement.value;
+    const investmentAmount = parseFloat(investmentAmountElement.value);
+    const periodsPerYear = parseInt(periodElement.value);
+    const years = parseInt(yearsElement.value);
+
+    // Calculate total payments
+    const totalPayments = periodsPerYear * years
 
     // Calculate future value
     let futureValue = 0
 
-    if (periodsPerYear) {
+    if (periodsPerYear != null && totalPayments !== 1) {
         futureValue = investmentAmount * (Math.pow(1 + annualRate / periodsPerYear, periodsPerYear * years) - 1) / (annualRate / periodsPerYear);
     } else {
         futureValue = investmentAmount * Math.pow(1 + annualRate, years);
@@ -132,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
         const yearsElement = document.getElementById("years");
 
         // Check if the input is valid or not
-        const isInptValid = validateUserInpts(investmentAmountElement, periodElement, yearsElement);
+        const isInptValid = validateUserInput(investmentAmountElement, periodElement, yearsElement);
 
         if (isInptValid) {
             // Calculate the future value
