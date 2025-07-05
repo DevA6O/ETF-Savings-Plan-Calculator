@@ -15,8 +15,15 @@ function validateUserInput(investmentAmountElement, periodElement, yearsElement)
         const error_label = document.createElement("label");
 
         investmentAmountElement.classList.add("wrong-inpt");
+
         error_label.textContent = investmentAmountElement.validationMessage;
         error_label.classList.add("wrong-label");
+            
+        if (investmentAmountElement.validity.rangeOverflow) {
+            const formattedMax = Number(investmentAmountElement.max).toLocaleString("en-US");
+            const defaultMessage = investmentAmountElement.validationMessage;
+            error_label.textContent = defaultMessage.replace(investmentAmountElement.max, formattedMax);
+        }
         
         investmentForm.appendChild(error_label);
         isInptValid = false;
