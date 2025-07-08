@@ -10,3 +10,7 @@ How to use:
 ```bash
 git clone https://github.com/DevA6O/Future-Value-Calculator.git
 ```
+
+Or simply open the <a href="https://deva6o.github.io/Future-Value-Calculator/">GitHub Pages demo</a> in your browser.
+
+Note: This is a demo web page intended for testing and development purposes only.
