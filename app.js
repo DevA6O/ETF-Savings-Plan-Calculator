@@ -1,150 +1,208 @@
-// Average return on investment per year
-const annualRate = 0.07;
+// Define every input element global
+let oneOffInvestmentInptElement;
+let savingIntervalSelectElement;
+let savingsRateInptElement;
+let interestIntervalInptElement;
+let yearsInptElement;
 
-function validateUserInput(investmentAmountElement, periodElement, yearsElement) {
-    // Reset errors
+// Define every form element global
+let oneOffInvestmentFormElement;
+let savingIntervalFormElement;
+let savingsRateFormElement;
+let interestIntervalFormElement;
+let yearsFormElement;
+
+// Define a base value which can be changing if the response is not valid
+// This value can only change if the user is confirm his information
+let isInptInvalid = false;
+
+
+function resetErrors() {
+    // Reset or delete every error labels and classes
     document.querySelectorAll(".wrong-label").forEach(label => label.remove());
-    investmentAmountElement.classList.remove("wrong-inpt");
-    periodElement.classList.remove("wrong-inpt");
-    yearsElement.classList.remove("wrong-inpt");
 
-    let isInptValid = true;
+    oneOffInvestmentInptElement.classList.remove("wrong-inpt");
+    savingIntervalSelectElement.classList.remove("wrong-inpt");
+    savingsRateInptElement.classList.remove("wrong-inpt");
+    interestIntervalInptElement.classList.remove("wrong-inpt");
+    yearsInptElement.classList.remove("wrong-inpt");
+}
 
-    // Validate the user inputs 
-    if (!investmentAmountElement.checkValidity()) {
-        const investmentForm = document.getElementById("investment-form");
-        const error_label = document.createElement("label");
+function setError(inptElement, formElement, textContent) {
+    // Display a error message to the user
+    const error_label = document.createElement("label");
 
-        investmentAmountElement.classList.add("wrong-inpt");
+    inptElement.classList.add("wrong-inpt");
 
-        error_label.textContent = investmentAmountElement.validationMessage;
-        error_label.classList.add("wrong-label");
-            
-        if (investmentAmountElement.validity.rangeOverflow) {
-            const formattedMax = Number(investmentAmountElement.max).toLocaleString("en-US");
-            const defaultMessage = investmentAmountElement.validationMessage;
-            error_label.textContent = defaultMessage.replace(investmentAmountElement.max, formattedMax);
+    error_label.textContent = textContent;
+    error_label.classList.add("wrong-label");
+
+    formElement.appendChild(error_label);
+}
+
+function removeError(inputElement, formElement) {
+    // Remove the display error
+    const errorLabel = formElement.querySelector(".wrong-label");
+
+    if (errorLabel) {
+        errorLabel.remove();
+    };
+
+    inputElement.classList.remove("wrong-inpt");
+}
+
+function convertNumbersReadableForErrors(number, message) {
+    // Convert the numbers to en spelling
+    const formattedNumber = Number(number).toLocaleString("en-US");
+    const errorMessage = message.replace(number, formattedNumber);
+
+    return errorMessage;
+}
+
+function validateUserInput() {
+    // Reset errors
+    resetErrors();
+
+    let isValid = true;
+
+    // Validate the user inputs
+    const inputsToValidate = [
+        [oneOffInvestmentInptElement, oneOffInvestmentFormElement],
+        [savingsRateInptElement, savingsRateFormElement],
+        [interestIntervalInptElement, interestIntervalFormElement],
+        [yearsInptElement, yearsFormElement]
+    ]
+
+    // Check that the input fields are filled in correctly.
+    for (const [inptElement, formElement] of inputsToValidate) {
+        if (inptElement === savingsRateInptElement) {
+            if (savingIntervalSelectElement.value === "one-time") {
+                break;
+            }
         }
-        
-        investmentForm.appendChild(error_label);
-        isInptValid = false;
-    } 
-    if (!periodElement.checkValidity()) {
-        const periodForm = document.getElementById("period-form");
-        const error_label = document.createElement("label");
+        if (!inptElement.checkValidity()) {
+            if (inptElement.validity.rangeOverflow) {
+                const errorMessage = convertNumbersReadableForErrors(
+                    inptElement.max, inptElement.validationMessage
+                );
+                setError(inptElement, formElement, errorMessage);
+            } else {
+                const errorMessage = inptElement.validationMessage;
+                setError(inptElement, formElement, errorMessage);
+            };
 
-        periodElement.classList.add("wrong-inpt");
-        error_label.textContent = periodElement.validationMessage;
-        error_label.classList.add("wrong-label");
-
-        periodForm.appendChild(error_label);
-        isInptValid = false;
-    } 
-    if (!yearsElement.checkValidity()) {
-        const yearsForm = document.getElementById("years-form");
-        const error_label = document.createElement("label");
-
-        yearsElement.classList.add("wrong-inpt");
-        error_label.textContent = yearsElement.validationMessage;
-        error_label.classList.add("wrong-label");
-
-        yearsForm.appendChild(error_label);
-        isInptValid = false;
+            isValid = false;
+        }
     }
 
-    return isInptValid;
+    return isValid;
 }
 
-function calculateFutureValue(investmentAmountElement, periodElement, yearsElement) {
-    // Define the values
-    const investmentAmount = parseFloat(investmentAmountElement.value);
-    const periodsPerYear = parseInt(periodElement.value);
-    const years = parseInt(yearsElement.value);
+function calculateFutureValue() {
+    // Define required value
+    const oneOffInvestmentValue = parseInt(oneOffInvestmentInptElement.value);
+    const savingIntervalValue = savingIntervalSelectElement.value;
+    const savingAmountValue = parseInt(savingsRateInptElement.value);
+    const interestAmountValue = parseFloat(interestIntervalInptElement.value / 100); 
+    const timePeriod = parseInt(yearsInptElement.value);
 
-    // Calculate total payments
-    const totalPayments = periodsPerYear * years
+    let futureValue = 0;
 
-    // Calculate future value
-    let futureValue = 0
-
-    if (periodsPerYear != null && totalPayments > 1) {
-        futureValue = investmentAmount * (Math.pow(1 + annualRate / periodsPerYear, periodsPerYear * years) - 1) / (annualRate / periodsPerYear);
+    if (savingIntervalValue === "monthly") {
+        const monthlyRate = interestAmountValue / 12;
+        const months = timePeriod * 12;
+        futureValue = oneOffInvestmentValue * Math.pow((1 + monthlyRate), months) +
+            savingAmountValue * ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate);
+    } 
+    else if (savingIntervalValue === "yearly") {
+        futureValue = oneOffInvestmentValue * Math.pow((1 + interestAmountValue), timePeriod) +
+            savingAmountValue * ((Math.pow(1 + interestAmountValue, timePeriod) - 1) / interestAmountValue);
     } else {
-        futureValue = investmentAmount * Math.pow(1 + annualRate, years);
+        futureValue = oneOffInvestmentValue * Math.pow((1 + interestAmountValue), timePeriod);
     }
 
-    // Round the future value and convert it to US spelling
-    const rounded = Math.round(futureValue * 100) / 100
-    return rounded.toLocaleString("en-US");
+    return parseFloat(Math.round(futureValue));
 }
 
-function calculateTotalInvestment(investmentAmount, period, years) {
-    // Calculate the total investment 
-    let totalInvestment = 0; 
+function calculateTotalInvestment() {
+    const oneOffInvestment = parseInt(oneOffInvestmentInptElement.value);
+    const savingIntervalValue = savingIntervalSelectElement.value;
 
-    if (period) {
-        totalInvestment = (investmentAmount * period) * years
-    } else {
-        totalInvestment = investmentAmount
-    }
+    // Check if the saving interval is just one off
+    if (savingIntervalValue === "one-time") {
+        return oneOffInvestment;
+    }   
 
-    const roundTotalInvestment = Math.round(totalInvestment * 100) / 100
-    return roundTotalInvestment.toLocaleString("en-US");
+    // If the saving interval is not just one off
+    const savingAmountValue = parseInt(savingsRateInptElement.value);
+    const timePeriod = parseInt(yearsInptElement.value);
+    let interval = timePeriod;
+
+    if (savingIntervalValue === "monthly") {
+        interval = timePeriod * 12;
+    } 
+
+    return parseInt(oneOffInvestment + (savingAmountValue * interval));
 }
 
 
 document.addEventListener("DOMContentLoaded", function(event) {
-    // Deactivates the submit with Enter
+    // Define every input element
+    oneOffInvestmentInptElement = document.getElementById("investment");
+    savingIntervalSelectElement = document.getElementById("saving-interval-options");
+    savingsRateInptElement = document.getElementById("savings-rate");
+    interestIntervalInptElement = document.getElementById("interest-interval");
+    yearsInptElement = document.getElementById("years");
+
+    // Define every form element
+    oneOffInvestmentFormElement = document.getElementById("investment-form");
+    savingIntervalFormElement = document.getElementById("saving-interval-form");
+    savingsRateFormElement = document.getElementById("savings-rate-form");
+    interestIntervalFormElement = document.getElementById("interest-interval-form");
+    yearsFormElement = document.getElementById("years-form");
+
+    // Deactivate the submit with enter in a input field
     const allForms = document.querySelectorAll("form");
     allForms.forEach(form => [
-        form.addEventListener("submit", function(event) {
+        form.addEventListener("submit", () => {
             event.preventDefault();
         })
     ])
 
-    // Gets the button element and create a event listener of button click
-    const buttonElement = document.getElementById("calculate-btn");
+    // Add event listener for the calculate button
+    const calculateButtonElement = document.getElementById("calculate-btn");
 
-    buttonElement.addEventListener("click", function(event) {
-        // Define the elements
-        const investmentAmountElement = document.getElementById("investment");
-        const periodElement = document.getElementById("period");
-        const yearsElement = document.getElementById("years");
+    calculateButtonElement.addEventListener("click", () => {
+        const isValid = validateUserInput();
 
-        // Check if the input is valid or not
-        const isInptValid = validateUserInput(investmentAmountElement, periodElement, yearsElement);
+        if (isValid) {
+            const futureValue = calculateFutureValue();
+            const totalInvestment = calculateTotalInvestment();
+            const profit = parseFloat(Math.round(futureValue - totalInvestment));
 
-        if (isInptValid) {
-            // Calculate the future value
-            calculatedValue = calculateFutureValue(investmentAmountElement, periodElement, yearsElement);
-            
-            // Remove every element in the result container
             const resultContainer = document.getElementById("result");
-            resultContainer.innerHTML = ""
-            resultContainer.style.display = "";
+            resultContainer.style.display = ""; // Removes display = none
+            resultContainer.innerHTML = ""; // Removes every element from the container
+            
+            const pTag = document.createElement("p");
+            pTag.innerHTML = `Total invested: <span class="highlight_result">$${totalInvestment}</span>. <br>
+            Future Value: <span class="highlight_result">$${futureValue}</span>. <br>
+            Profit: <span class="highlight_result">$${profit}</span>.`
 
-            // Create a response for the user
-            if (periodElement.value !== "" && !Number.isNaN(period)) {
-                text = `Your investment will be <span class="highlight_result">$${calculatedValue}</span> 
-                with <span class="highlight_result">${periodElement.value}</span> investment periods 
-                per year over <span class="highlight_result">${yearsElement.value}</span> years.`
-            } else {
-                text = `Your investment will be <span class="highlight_result">$${calculatedValue}</span> 
-                in <span class="highlight_result">${yearsElement.value}</span> years.`
-            }
-            
-            // Create and add a new p tag to the result container
-            pTag = document.createElement("p");
-            pTag.innerHTML = text;
-            
-            // Calculate total investment and add it to the result container
-            const totalInvestment = calculateTotalInvestment(investmentAmountElement.value, periodElement.value, years.value)
-
-            h2Tag = document.createElement("h4");
-            h2Tag.innerHTML = `Your total investment is: $${totalInvestment}.`
-            
-            resultContainer.appendChild(h2Tag)
             resultContainer.appendChild(pTag);
+        } else {
+            isInptInvalid = true;
+        }   
+    })
+
+    // Add event listener for the select menu
+    savingIntervalSelectElement.addEventListener("change", (event) => {
+        const selectedValue = event.target.value;
+
+        if (selectedValue === "one-time") {
+            savingsRateFormElement.classList.add("disabled-form");
+        } else {
+            savingsRateFormElement.classList.remove("disabled-form");
         }
     })
 })
