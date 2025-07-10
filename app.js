@@ -12,9 +12,9 @@ let savingsRateFormElement;
 let interestIntervalFormElement;
 let yearsFormElement;
 
-// Define a base value which can be changing if the response is not valid
+// Define a base value which can be changing if the response is valid or not valid
 // This value can only change if the user is confirm his information
-let isInptInvalid = false;
+let isInptValid = true;
 
 
 function resetErrors() {
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
             resultContainer.appendChild(pTag);
         } else {
-            isInptInvalid = true;
+            isInptValid = false;
         }   
     })
 
@@ -204,5 +204,30 @@ document.addEventListener("DOMContentLoaded", function(event) {
         } else {
             savingsRateFormElement.classList.remove("disabled-form");
         }
+    })
+
+    // Add event listener for live display of errors, BUT only if the user confirms their information first
+    const forms = document.querySelectorAll("form");
+
+    forms.forEach(form => {
+        form.addEventListener("input", function(event) {
+            const element = event.target;
+
+            if (!isInptValid && element.tagName === "INPUT") {
+                removeError(element, form)
+
+                if (!element.checkValidity()) {
+                    if (element.validity.rangeOverflow) {
+                        const errorMessage = convertNumbersReadableForErrors(
+                            element.max, element.validationMessage
+                        );
+                        setError(element, form, errorMessage);
+                    } else {
+                        const errorMessage = element.validationMessage;
+                        setError(element, form, errorMessage);
+                    };
+                };
+            };
+        })
     })
 })
