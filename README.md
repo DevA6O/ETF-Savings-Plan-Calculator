@@ -1,16 +1,16 @@
-# Future-Value-Calculator
-🫰 Calculate the future value of your investment 🐧
+# ETF-Savings-Plan-Calculator
 
 # Preview 🚀
-![Image](https://github.com/user-attachments/assets/db7b118e-76c5-4478-ae78-a2b4b739fc05)
-![Image](https://github.com/user-attachments/assets/dd93ee2d-5d80-44d0-9877-27c732dbfc33)
+![Screenshot-2025-07-10-031040](https://github.com/user-attachments/assets/85c2ecd0-63de-45e3-b888-632aaf2aec12)
+![Screenshot-2025-07-10-031353](https://github.com/user-attachments/assets/352d8e1d-58f8-47fb-8830-fc794029b028)
+![Screenshot-2025-07-10-031412](https://github.com/user-attachments/assets/69567598-49e2-49e9-9d70-bcbf8f9a82e4)
 
 How to use:
 
 ```bash
-git clone https://github.com/DevA6O/Future-Value-Calculator.git
+https://github.com/DevA6O/ETF-Savings-Plan-Calculator.git
 ```
 
-Or simply open the <a href="https://deva6o.github.io/Future-Value-Calculator/">GitHub Pages demo</a> in your browser.
+Or simply open the <a href="https://deva6o.github.io/ETF-Savings-Plan-Calculator/">GitHub Pages demo</a> in your browser.
 
 Note: This is a demo web page intended for testing and development purposes only.
