@@ -77,7 +77,7 @@ function validateUserInput() {
     for (const [inptElement, formElement] of inputsToValidate) {
         if (inptElement === savingsRateInptElement) {
             if (savingIntervalSelectElement.value === "one-time") {
-                break;
+                continue;
             }
         }
         if (!inptElement.checkValidity()) {
