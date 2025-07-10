@@ -72,6 +72,83 @@
     border: 2px solid var(--font-color);
 }
 
+.calculator-select {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.calculator-select label {
+    margin: 0 0 10px 0;
+}
+
+.calculator-select select {
+    padding: 10px;
+    font-size: 12pt;
+    margin: 0 0 10px 0;
+    border-radius: 10px;
+    border: none;
+    border: 2px solid var(--purple);
+    cursor: pointer;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.input-with-unit {
+    position: relative;
+    display: inline-block;
+}
+
+.input-with-unit input {
+    width: 100%;
+    padding-right: 80px;
+}
+
+.input-with-unit .unit {
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Damit der Text keine Klicks blockiert */
+    font-size: 12pt;
+    font-weight: bold;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 6px;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 260px;
+  background-color: var(--font-color);
+  color: var(--bg-color);
+  text-align: center;
+  border-radius: 6px;
+  padding: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  font-size: 11pt;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+
 #calculate {
     display: flex;
     justify-content: center;
@@ -119,13 +196,17 @@
     font-weight: bold;
 }
 
+.disabled-form {
+    display: none !important;
+}
+
 /* Removes the spinner buttons for the number inputs */
-input[type-number]::-webkit-inner-spin-button,
-input[type-number]::-webkit-outer-spin-button {
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
-    margin: 0;;
+    margin: 0;
 }
 
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
 }
